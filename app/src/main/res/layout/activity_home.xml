@@ -6,17 +6,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
-    <!-- 顯示歡迎訊息 -->
-    <TextView
-        android:id="@+id/welcomeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="歡迎來到主頁面！"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+    <!-- res/layout/activity_main.xml -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- 搜尋區塊 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <!-- 搜尋輸入框 -->
+
+            <EditText
+                android:id="@+id/editTextSearch"
+                android:layout_width="312dp"
+                android:layout_height="60dp"
+                android:hint="搜尋咖啡廳"
+                android:inputType="text" />
+
+            <ImageButton
+                android:id="@+id/btnLocation"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:contentDescription="定位"
+                android:src="@drawable/location" />
+                <!-- android:scaleType="fitCenter" 讓圖片等比例縮放並完整顯示在 ImageView 中 -->
+                <!-- android:adjustViewBounds="true" 根據圖片比例調整 ImageView 邊界 -->
+        </LinearLayout>
+
+        <!-- 店家列表 RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="167dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
