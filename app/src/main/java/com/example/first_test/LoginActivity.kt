@@ -11,14 +11,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
+    // FirebaseAuth 物件
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()  // 開啟邊緣設計
+        enableEdgeToEdge()
         setContentView(R.layout.activity_login1)
 
-        // 設置邊緣適配
+        // 初始化 FirebaseAuth
+        auth = FirebaseAuth.getInstance()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -43,26 +49,22 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 假設這裡有一個硬編碼的用戶資料進行檢查（這部分可以改成從資料庫或 API 驗證）
-            val validUsername = "user@example.com"
-            val validPassword = "password123"
+             // 使用 Firebase Auth 進行登入
+            auth.signInWithEmailAndPassword(account, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // 登入成功
+                        Toast.makeText(this, "登入成功，歡迎回來！", Toast.LENGTH_SHORT).show()
 
-            if (account == validUsername && password == validPassword) {
-                // 登入成功，儲存登入狀態到 SharedPreferences
-                val sharedPreferences: SharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                with(sharedPreferences.edit()) {
-                    putBoolean("isLoggedIn", true)
-                    apply()  // 使用 apply() 儲存資料
+                        // 跳轉至 HomeActivity
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        // 登入失敗，顯示錯誤訊息
+                        Toast.makeText(this, "登入失敗：${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    }
                 }
-
-                // 登入成功後，跳轉到 HomeActivity
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                finish()  // 結束 MainActivity，避免使用者返回
-            } else {
-                // 如果帳號或密碼錯誤，顯示錯誤訊息
-                Toast.makeText(this, "帳號或密碼錯誤", Toast.LENGTH_SHORT).show()
-            }
         }
 
         // 忘記密碼按鈕點擊事件
