@@ -59,6 +59,7 @@
         android:orientation="horizontal"
         android:background="#4c2812"
         android:padding="8dp"
+        android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

@@ -91,19 +91,22 @@ class HomeActivity : AppCompatActivity() {
         val btnProfile = findViewById<ImageButton>(R.id.btnProfile)
 
         btnHome.setOnClickListener {
-            Toast.makeText(this, "首頁", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "你已在主頁", Toast.LENGTH_SHORT).show()
         }
 
         btnSchedule.setOnClickListener {
-            Toast.makeText(this, "我的行程", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ScheduleActivity::class.java)
+            startActivity(intent)
         }
 
         btnFavorite.setOnClickListener {
-            Toast.makeText(this, "收藏清單", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, FavoriteActivity::class.java)
+            startActivity(intent)
         }
 
         btnNotification.setOnClickListener {
-            Toast.makeText(this, "通知", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, NotificationActivity::class.java)
+            startActivity(intent)
         }
 
         btnProfile.setOnClickListener {

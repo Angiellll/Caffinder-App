@@ -4,6 +4,7 @@ package com.example.first_test
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -49,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-             // 使用 Firebase Auth 進行登入
+            // 使用 Firebase Auth 進行登入
             auth.signInWithEmailAndPassword(account, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -62,7 +63,11 @@ class LoginActivity : AppCompatActivity() {
                         finish()
                     } else {
                         // 登入失敗，顯示錯誤訊息
-                        Toast.makeText(this, "登入失敗：${task.exception?.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this,
+                            "登入失敗：${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
         }

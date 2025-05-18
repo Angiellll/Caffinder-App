@@ -33,26 +33,30 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        languageVersion = "1.9"
+        apiVersion = "1.9"
     }
 }
 
 dependencies {
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    // Firebase 用 BOM 管理版本，這邊只寫一次即可
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
 
-    // 原本的
+
+    // 其他
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.core:core:1.9.0")
-    implementation ("com.google.android.material:material:1.10.0")
-
+    implementation("com.google.android.material:material:1.10.0")
 
 }

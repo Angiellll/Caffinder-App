@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".ScheduleActivity">
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:background="#FF8A65"
+        android:contentDescription="返回"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -18,4 +29,71 @@
         app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 底部導航列：使用 ImageButton 顯示圖示 -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#4c2812"
+        android:padding="8dp"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_home"
+            android:background="@android:color/transparent"
+            android:contentDescription="首頁"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+
+        <ImageButton
+            android:id="@+id/btnSchedule"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_schedule"
+            android:background="@android:color/transparent"
+            android:contentDescription="行程"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+
+        <ImageButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_favorite"
+            android:background="@android:color/transparent"
+            android:contentDescription="收藏清單"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+
+        <ImageButton
+            android:id="@+id/btnNotification"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_notification"
+            android:background="@android:color/transparent"
+            android:contentDescription="通知" android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+
+        <ImageButton
+            android:id="@+id/btnProfile"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_profile"
+            android:background="@android:color/transparent"
+            android:contentDescription="個人頁面" android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
