@@ -1,6 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.First_test" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.First_test" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">#4c2812</item>
+        <item name="android:navigationBarColor">#4c2812</item>
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>

@@ -5,30 +5,43 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF3ED"
+    android:fitsSystemWindows="false"
+    android:clipToPadding="false"
     tools:context=".NotificationActivity">
-
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:background="#FF8A65"
-        android:contentDescription="返回"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="通知頁面"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="#4c2812"
+        android:gravity="center_vertical"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="返回"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_back" />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="通知"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            app:layout_constraintTop_toTopOf="@id/btnBack" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottomNav"
@@ -82,7 +95,8 @@
             android:layout_weight="1"
             android:src="@drawable/ic_notification"
             android:background="@android:color/transparent"
-            android:contentDescription="通知" android:scaleType="fitCenter"
+            android:contentDescription="通知"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
 
         <ImageButton
