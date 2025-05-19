@@ -95,5 +95,19 @@ class ProfileActivity : AppCompatActivity() {
             Toast.makeText(this, "你已在會員檔案", Toast.LENGTH_SHORT).show()
         }
 
+        val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            // Firebase 登出
+            FirebaseAuth.getInstance().signOut()
+
+            Toast.makeText(this, "已登出", Toast.LENGTH_SHORT).show()
+
+            // 跳回登入頁面，並清除返回堆疊
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
     }
 }
