@@ -44,15 +44,17 @@ class ProfileActivity : AppCompatActivity() {
                 val name = data?.getStringExtra("name")
                 val birthday = data?.getStringExtra("birthday")
                 val phone = data?.getStringExtra("phone")
-                val email = data?.getStringExtra("email")
                 val gender = data?.getStringExtra("gender")
 
                 // 顯示資料到畫面上（請確保 layout 有對應 id）
                 findViewById<TextView>(R.id.txtName).text = "姓名：$name"
                 findViewById<TextView>(R.id.txtBirthday).text = "生日：$birthday"
                 findViewById<TextView>(R.id.txtPhone).text = "電話：$phone"
-                findViewById<TextView>(R.id.txtEmail).text = "電子郵件：$email"
                 findViewById<TextView>(R.id.txtGender).text = "性別：$gender"
+
+                // ✅ 再次從 Firebase 拿 email 顯示
+                val firebaseEmail = FirebaseAuth.getInstance().currentUser?.email
+                findViewById<TextView>(R.id.txtEmail).text = "電子郵件：${firebaseEmail ?: "尚未登入"}"
             }
         }
 
