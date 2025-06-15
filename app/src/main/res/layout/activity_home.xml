@@ -44,11 +44,12 @@
         </LinearLayout>
 
         <!-- 店家列表 RecyclerView -->
+        <!-- 在 activity_home.xml 中加入 RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recyclerViewCafes"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:padding="16dp" />
     </LinearLayout>
 
     <!-- 底部導航列：使用 ImageButton 顯示圖示 -->
@@ -116,6 +117,8 @@
             android:background="@android:color/transparent"
             android:contentDescription="個人頁面" android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
