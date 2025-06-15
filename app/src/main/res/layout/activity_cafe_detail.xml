@@ -8,6 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- 圖片 -->
+        <ImageView
+            android:id="@+id/imgCafe"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="咖啡廳圖片" />
+
+        <!-- 名稱 -->
         <TextView
             android:id="@+id/tvCafeName"
             android:text="咖啡廳名稱"
@@ -17,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <!-- 地址 -->
         <TextView
             android:id="@+id/tvCafeAddress"
             android:text="地址"
@@ -25,18 +36,102 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <!-- Wi-Fi -->
         <TextView
             android:id="@+id/tvCafeWifi"
-            android:text="Wi-Fi 評分："
+            android:text="Wi-Fi 穩定度："
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <!-- 座位 -->
+        <TextView
+            android:id="@+id/tvCafeSeat"
+            android:text="座位舒適度："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 安靜 -->
+        <TextView
+            android:id="@+id/tvCafeQuiet"
+            android:text="安靜程度："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 餐點好吃 -->
+        <TextView
+            android:id="@+id/tvCafeTasty"
+            android:text="餐點好吃程度："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 價格便宜 -->
+        <TextView
+            android:id="@+id/tvCafeCheap"
+            android:text="價格親民程度："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 音樂氛圍 -->
+        <TextView
+            android:id="@+id/tvCafeMusic"
+            android:text="音樂氛圍評分："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 營業時間 -->
         <TextView
             android:id="@+id/tvCafeOpenTime"
             android:text="營業時間："
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+            android:layout_height="wrap_content" />
+
+        <!-- 有無時間限制 -->
+        <TextView
+            android:id="@+id/tvCafeLimitedTime"
+            android:text="是否有時間限制："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 有無插座 -->
+        <TextView
+            android:id="@+id/tvCafePower"
+            android:text="電源插座："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 有無站立桌 -->
+        <TextView
+            android:id="@+id/tvCafeStanding"
+            android:text="站立式桌子："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 鄰近捷運站 -->
+        <TextView
+            android:id="@+id/tvCafeMRT"
+            android:text="鄰近捷運站："
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 地圖網址（或官方網站） -->
+        <TextView
+            android:id="@+id/tvCafeUrl"
+            android:text="網站："
+            android:autoLink="web"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <!-- 你可以根據 cafe.kt 的其他欄位繼續增加 -->
 
