@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.gms.google-services")
     id ("kotlin-parcelize")
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -45,7 +47,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
-
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    kapt ("com.github.bumptech.glide:compiler:4.16.0")
 
     // 其他
     implementation(libs.androidx.core.ktx)
@@ -57,7 +60,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.core:core:1.9.0")
+    //implementation("androidx.core:core:1.9.0")
     implementation("com.google.android.material:material:1.10.0")
 
     //api

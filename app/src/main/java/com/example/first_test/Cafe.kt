@@ -17,6 +17,7 @@ data class Cafe(
     val address: String?,
     val latitude: Double?,
     val longitude: Double?,
+    val imageUrl: String?,  // 新增咖啡廳圖片網址欄位
 
     @SerializedName("limited_time")
     val limitedTime: String?,

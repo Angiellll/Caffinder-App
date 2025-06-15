@@ -63,20 +63,17 @@ class HomeActivity : AppCompatActivity() {
 
         window.navigationBarColor = Color.parseColor("#4c2812") //底部導覽列改色
 
-        // 找元件
         recyclerView = findViewById(R.id.recyclerViewCafes)
         editTextSearch = findViewById(R.id.editTextSearch)
-
-        // 設定 RecyclerView 為網格顯示
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        // 取得資料並設置 Adapter
+        // 從 API 取得資料
         RetrofitClient.apiService.getCafes().enqueue(object : Callback<List<Cafe>> {
             override fun onResponse(call: Call<List<Cafe>>, response: Response<List<Cafe>>) {
                 if (response.isSuccessful && response.body() != null) {
                     fullCafeList = response.body()!!
                     adapter = CafeAdapter(fullCafeList.toMutableList()) { selectedCafe ->
-                        val intent = Intent(this@HomeActivity, CafeDetailActivity::class.java)
+                    val intent = Intent(this@HomeActivity, CafeDetailActivity::class.java)
                         intent.putExtra("cafe", selectedCafe)
                         startActivity(intent)
                     }
@@ -102,12 +99,13 @@ class HomeActivity : AppCompatActivity() {
                     (it.name?.contains(query, ignoreCase = true) == true) ||
                             (it.address?.contains(query, ignoreCase = true) == true)
                 }
-
-                adapter.updateList(filteredList)
+                if (::adapter.isInitialized) {
+                    adapter.updateList(filteredList)
+                }
             }
         })
 
-        // 地圖定位
+        // 地圖定位功能
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
@@ -134,7 +132,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        // 下方導覽按鈕
+        // 底部導覽
         findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
             Toast.makeText(this, "你已在主頁", Toast.LENGTH_SHORT).show()
         }
