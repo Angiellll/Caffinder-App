@@ -43,4 +43,6 @@ data class Cafe(
 
     @SerializedName("open_time")
     val openTime: String?       // 營業時間（例如 "10:00 - 21:00"）
+
+    //要加低消跟其他最終資料庫欄位！！！！！！
 ) : Parcelable

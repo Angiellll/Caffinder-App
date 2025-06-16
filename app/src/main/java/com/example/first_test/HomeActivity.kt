@@ -73,10 +73,11 @@ class HomeActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     fullCafeList = response.body()!!
                     adapter = CafeAdapter(fullCafeList.toMutableList()) { selectedCafe ->
-                    val intent = Intent(this@HomeActivity, CafeDetailActivity::class.java)
+                        val intent = Intent(this@HomeActivity, CafeDetailActivity::class.java)
                         intent.putExtra("cafe", selectedCafe)
                         startActivity(intent)
                     }
+
                     recyclerView.adapter = adapter
                 } else {
                     Toast.makeText(this@HomeActivity, "載入失敗：${response.code()}", Toast.LENGTH_SHORT).show()

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 class CafeAdapter(
     private var cafes: MutableList<Cafe>,
     private val onItemClick: (Cafe) -> Unit
+
 ) : RecyclerView.Adapter<CafeAdapter.CafeViewHolder>() {
 
     inner class CafeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,7 +25,7 @@ class CafeAdapter(
 
             Glide.with(itemView.context)
                 .load(cafe.imageUrl)
-                .placeholder(R.drawable.placeholder) // 載入中顯示的圖
+                .placeholder(R.drawable.loading) // 載入中顯示的圖
                 .error(R.drawable.error)             // 載入失敗顯示的圖
                 .fallback(R.drawable.default_image)  // imageUrl 為 null 時顯示的圖（你可以自訂 default_image.png）
                 .into(image)
@@ -49,4 +50,6 @@ class CafeAdapter(
         cafes.addAll(newList)
         notifyDataSetChanged()
     }
+
+
 }
