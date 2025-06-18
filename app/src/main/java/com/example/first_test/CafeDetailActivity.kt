@@ -73,7 +73,7 @@ class CafeDetailActivity : AppCompatActivity() {
         if (cafe.mrt.isNullOrBlank()) {
             tvMRT.visibility = View.GONE
         } else {
-            tvMRT.text = "鄰近捷運站：${cafe.mrt}"
+            tvMRT.text = "・鄰近捷運站：${cafe.mrt}"
         }
 
         //以下為導覽列設定
