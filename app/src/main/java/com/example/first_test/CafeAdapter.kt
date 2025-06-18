@@ -11,24 +11,32 @@ import com.bumptech.glide.Glide
 class CafeAdapter(
     private var cafes: MutableList<Cafe>,
     private val onItemClick: (Cafe) -> Unit
-
 ) : RecyclerView.Adapter<CafeAdapter.CafeViewHolder>() {
 
     inner class CafeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val name: TextView = itemView.findViewById(R.id.tvCafeName)
-        private val address: TextView = itemView.findViewById(R.id.tvCafeAddress)
-        private val image: ImageView = itemView.findViewById(R.id.imgCafe)
+        val name = itemView.findViewById<TextView>(R.id.tvCafeName)
+        val address = itemView.findViewById<TextView>(R.id.tvCafeAddress)
+        val image = itemView.findViewById<ImageView>(R.id.imgCafe)
 
         fun bind(cafe: Cafe) {
             name.text = cafe.name
             address.text = cafe.address
 
-            Glide.with(itemView.context)
-                .load(cafe.imageUrl)
-                .placeholder(R.drawable.loading) // 載入中顯示的圖
-                .error(R.drawable.error)             // 載入失敗顯示的圖
-                .fallback(R.drawable.default_image)  // imageUrl 為 null 時顯示的圖（你可以自訂 default_image.png）
-                .into(image)
+            // 現在先一律顯示 default_image.png
+            image.setImageResource(R.drawable.default_image)
+
+            /*
+            // 等未來資料庫有圖片 URL 時，再開啟以下程式碼：
+            if (!cafe.imageUrl.isNullOrEmpty()) {
+                Glide.with(itemView.context)
+                    .load(cafe.imageUrl)
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(image)
+            } else {
+                image.setImageResource(R.drawable.default_image)
+            }
+            */
 
             itemView.setOnClickListener { onItemClick(cafe) }
         }
@@ -50,6 +58,4 @@ class CafeAdapter(
         cafes.addAll(newList)
         notifyDataSetChanged()
     }
-
-
 }

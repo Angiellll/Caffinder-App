@@ -1,100 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#c0a991"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical"
+    android:background="#FFF3ED">
 
-    <!-- 上方 TopBar：固定在最上面 -->
+    <!-- Top Bar -->
     <LinearLayout
         android:id="@+id/topBar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
         android:background="#4c2812"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:gravity="center_vertical">
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_back"
+            android:contentDescription="返回"
             android:scaleType="centerCrop"
-            android:contentDescription="返回" />
+            android:src="@drawable/ic_back" />
+
     </LinearLayout>
 
-    <!-- 中間 ScrollView 可滑動內容 -->
+    <!-- Scrollable Content -->
     <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_weight="1"
+        android:padding="24dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <!-- 名稱與網站圖示 -->
+            <!-- 名稱 + 網址 icon -->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/tvCafeName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="咖啡廳名稱"
-                    android:textSize="24sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:maxLines="2"
+                    android:ellipsize="end" />
 
                 <ImageView
                     android:id="@+id/imgCafeUrl"
-                    android:layout_width="27dp"
-                    android:layout_height="29dp"
+                    android:layout_width="35dp"
+                    android:layout_height="45dp"
                     android:layout_marginStart="8dp"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_link"
-                    android:contentDescription="前往咖啡廳網站"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:src="@drawable/ic_link" />
             </LinearLayout>
 
-            <!-- 輪播圖 ViewPager2 --> <!-- 輪播區塊高度200dp -->
-            <!-- 與上方元件的間距為16dp-->
-            <!-- 不要剪裁 padding 區域，讓預覽看起來更自然 -->
-            <!-- 不要裁切左右 child 項目（如果做左右預覽效果） -->
-            <!-- 禁止滑動時的邊緣光暈 -->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
+            <!-- 圖片 -->
+            <ImageView
+                android:id="@+id/imgCafe"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
                 android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:clipChildren="false"
-                android:overScrollMode="never" />
+                android:contentDescription="咖啡廳圖片" />
 
             <!-- 地址 -->
             <TextView
                 android:id="@+id/tvCafeAddress"
                 android:text="地址"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -104,45 +93,42 @@
                 android:id="@+id/tvCafeOpenTime"
                 android:text="營業時間："
                 android:layout_marginTop="8dp"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
             <TextView
                 android:id="@+id/tvCafeLimitedTime"
                 android:text="是否有限時："
                 android:layout_marginTop="8dp"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
             <TextView
                 android:id="@+id/tvCafePower"
                 android:text="插座："
                 android:layout_marginTop="8dp"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
             <TextView
                 android:id="@+id/tvCafeMRT"
                 android:text="鄰近捷運站："
+                android:textSize="15sp"
                 android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
         </LinearLayout>
     </ScrollView>
 
-    <!-- 底部 BottomNav：固定不動 -->
+    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNav"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#4c2812"
         android:padding="8dp"
-        android:paddingBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:paddingBottom="24dp">
 
         <ImageButton
             android:id="@+id/btnHome"
@@ -164,7 +150,8 @@
             android:background="@android:color/transparent"
             android:contentDescription="行程"
             android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"/>
+
 
         <ImageButton
             android:id="@+id/btnFavorite"
@@ -175,7 +162,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="收藏清單"
             android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"/>
 
         <ImageButton
             android:id="@+id/btnNotification"
@@ -186,7 +173,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="通知"
             android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"/>
 
         <ImageButton
             android:id="@+id/btnProfile"
@@ -195,8 +182,7 @@
             android:layout_weight="1"
             android:src="@drawable/ic_profile"
             android:background="@android:color/transparent"
-            android:contentDescription="會員檔案"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:contentDescription="個人頁面" android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

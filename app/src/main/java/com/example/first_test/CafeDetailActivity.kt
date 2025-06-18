@@ -3,61 +3,100 @@ package com.example.first_test
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 
 class CafeDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cafe_detail) // 設定畫面為 cafe 詳細頁
+        setContentView(R.layout.activity_cafe_detail)
 
-        
-        // 從前一頁 Intent 取得傳過來的咖啡廳資料（parcelable）
-        @Suppress("DEPRECATION")
-        val cafe = intent.getParcelableExtra("cafe") as? Cafe
-
-        val textViewName = findViewById<TextView>(R.id.tvCafeName)
-        val textViewAddress = findViewById<TextView>(R.id.tvCafeAddress)
-
-        try {
-            if (cafe != null) {
-                textViewName.text = cafe.name ?: "名稱未知"
-                textViewAddress.text = cafe.address ?: "地址未知"
-
-                val imageUrls = listOfNotNull(
-                    cafe.imageUrl.takeIf { !it.isNullOrBlank() },
-                    "https://example.com/image2.jpg",
-                    "https://example.com/image3.jpg"
-                )
-
-                val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-                viewPager.adapter = ImageSliderAdapter(imageUrls)
-
-                findViewById<TextView>(R.id.tvCafeOpenTime).text = "營業時間：${cafe.openTime ?: "未知"}"
-                findViewById<TextView>(R.id.tvCafeLimitedTime).text = "是否有限時（maybe：依人潮決定）：${cafe.limitedTime ?: "未知"}"
-                findViewById<TextView>(R.id.tvCafePower).text = "插座充足程度（maybe：部分座位有）：${cafe.socket ?: "未知"}"
-                findViewById<TextView>(R.id.tvCafeMRT).text = "鄰近捷運站：${cafe.mrt ?: "未知"}"
-
-                val imgCafeUrl = findViewById<ImageView>(R.id.imgCafeUrl)
-                imgCafeUrl.setOnClickListener {
-                    cafe.url?.takeIf { it.isNotBlank() }?.let { url ->
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        startActivity(intent)
-                    }
-                }
-
-            } else {
-                Toast.makeText(this, "資料載入失敗", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "頁面載入發生錯誤", Toast.LENGTH_LONG).show()
+        val cafe = intent.getParcelableExtra<Cafe>("cafe")
+        if (cafe == null) {
+            finish() // 沒有資料就關掉頁面，避免出錯
+            return
         }
 
+        val imgCafe = findViewById<ImageView>(R.id.imgCafe)
+        Glide.with(this)
+            .load(cafe.imageUrl)
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.default_image)
+            .into(imgCafe)
+
+        val imgCafeUrl = findViewById<ImageView>(R.id.imgCafeUrl)
+        if (cafe.url.isNullOrBlank()) {
+            imgCafeUrl.visibility = View.GONE
+        } else {
+            imgCafeUrl.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(cafe.url))
+                startActivity(intent)
+            }
+        }
+
+        //店名
+        findViewById<TextView>(R.id.tvCafeName).text = cafe.name ?: "名稱未知"
+        // 地址
+        findViewById<TextView>(R.id.tvCafeAddress).text = "${cafe.address ?: "地址未知"}"
+
+        //營業時間（當資料庫欄位為Null或空字串時，隱藏該TextView）
+        val tvOpenTime = findViewById<TextView>(R.id.tvCafeOpenTime)
+        if (cafe.openTime.isNullOrBlank()) {
+            tvOpenTime.visibility = View.GONE
+        } else {
+            tvOpenTime.text = "・營業時間：${cafe.openTime}"
+        }
+
+        //限時（當資料庫欄位為Null或空字串時，隱藏該TextView）
+        val tvLimitedTime = findViewById<TextView>(R.id.tvCafeLimitedTime)
+        if (cafe.limitedTime.isNullOrBlank()) {
+            tvLimitedTime.visibility = View.GONE
+        } else {
+            tvLimitedTime.text = "・是否有限時：${cafe.limitedTime}"
+        }
+
+        //插座（當資料庫欄位為Null或空字串時，隱藏該TextView）
+        val tvPower = findViewById<TextView>(R.id.tvCafePower)
+        if (cafe.socket.isNullOrBlank()) {
+            tvPower.visibility = View.GONE
+        } else {
+            tvPower.text = "・插座：${cafe.socket}"
+        }
+
+        //捷運站（當資料庫欄位為Null或空字串時，隱藏該TextView）
+        val tvMRT = findViewById<TextView>(R.id.tvCafeMRT)
+        if (cafe.mrt.isNullOrBlank()) {
+            tvMRT.visibility = View.GONE
+        } else {
+            tvMRT.text = "・鄰近捷運站：${cafe.mrt}"
+        }
+
+        //以下為導覽列設定
+        // 返回上一頁
+        val btnBack = findViewById<ImageButton>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            finish()
+        }
+        // 下方導覽按鈕
+        findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+        }
+        findViewById<ImageButton>(R.id.btnSchedule).setOnClickListener {
+            startActivity(Intent(this, ScheduleActivity::class.java))
+        }
+        findViewById<ImageButton>(R.id.btnFavorite).setOnClickListener {
+            startActivity(Intent(this, FavoriteActivity::class.java))
+        }
+        findViewById<ImageButton>(R.id.btnNotification).setOnClickListener {
+            startActivity(Intent(this, NotificationActivity::class.java))
+        }
+        findViewById<ImageButton>(R.id.btnProfile).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
     }
 }

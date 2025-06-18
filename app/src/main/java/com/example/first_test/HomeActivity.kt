@@ -61,13 +61,16 @@ class HomeActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         }
 
-        window.navigationBarColor = Color.parseColor("#4c2812") //底部導覽列改色
+        window.navigationBarColor = Color.parseColor("#4c2812")
 
+        // 找元件
         recyclerView = findViewById(R.id.recyclerViewCafes)
         editTextSearch = findViewById(R.id.editTextSearch)
+
+        // 設定 RecyclerView 為網格顯示
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        // 從 API 取得資料
+        // 取得資料並設置 Adapter
         RetrofitClient.apiService.getCafes().enqueue(object : Callback<List<Cafe>> {
             override fun onResponse(call: Call<List<Cafe>>, response: Response<List<Cafe>>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -77,7 +80,6 @@ class HomeActivity : AppCompatActivity() {
                         intent.putExtra("cafe", selectedCafe)
                         startActivity(intent)
                     }
-
                     recyclerView.adapter = adapter
                 } else {
                     Toast.makeText(this@HomeActivity, "載入失敗：${response.code()}", Toast.LENGTH_SHORT).show()
@@ -92,21 +94,21 @@ class HomeActivity : AppCompatActivity() {
 
         // 搜尋功能
         editTextSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString().trim()
                 val filteredList = fullCafeList.filter {
                     (it.name?.contains(query, ignoreCase = true) == true) ||
                             (it.address?.contains(query, ignoreCase = true) == true)
                 }
-                if (::adapter.isInitialized) {
-                    adapter.updateList(filteredList)
-                }
+                adapter.updateList(filteredList)
             }
+
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         })
 
-        // 地圖定位功能
+
+        // 地圖定位
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
@@ -133,7 +135,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        // 底部導覽
+        // 下方導覽按鈕
         findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
             Toast.makeText(this, "你已在主頁", Toast.LENGTH_SHORT).show()
         }
