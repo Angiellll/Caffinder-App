@@ -1,5 +1,6 @@
 package com.example.first_test
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,36 +11,14 @@ import com.bumptech.glide.Glide
 
 class CafeAdapter(
     private var cafes: MutableList<Cafe>,
+    private val context: Context,
     private val onItemClick: (Cafe) -> Unit
 ) : RecyclerView.Adapter<CafeAdapter.CafeViewHolder>() {
 
     inner class CafeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.findViewById<TextView>(R.id.tvCafeName)
-        val address = itemView.findViewById<TextView>(R.id.tvCafeAddress)
-        val image = itemView.findViewById<ImageView>(R.id.imgCafe)
-
-        fun bind(cafe: Cafe) {
-            name.text = cafe.name
-            address.text = cafe.address
-
-            // 現在先一律顯示 default_image.png
-            image.setImageResource(R.drawable.default_image)
-
-            /*
-            // 等未來資料庫有圖片 URL 時，再開啟以下程式碼：
-            if (!cafe.imageUrl.isNullOrEmpty()) {
-                Glide.with(itemView.context)
-                    .load(cafe.imageUrl)
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(image)
-            } else {
-                image.setImageResource(R.drawable.default_image)
-            }
-            */
-
-            itemView.setOnClickListener { onItemClick(cafe) }
-        }
+        val tvCafeName: TextView = itemView.findViewById(R.id.tvCafeName)
+        val tvCafeAddress: TextView = itemView.findViewById(R.id.tvCafeAddress)
+        val imgCafe: ImageView = itemView.findViewById(R.id.imgCafe)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CafeViewHolder {
@@ -48,7 +27,17 @@ class CafeAdapter(
     }
 
     override fun onBindViewHolder(holder: CafeViewHolder, position: Int) {
-        holder.bind(cafes[position])
+        val cafe = cafes[position]
+        holder.tvCafeName.text = cafe.name
+        holder.tvCafeAddress.text = cafe.address
+
+        Glide.with(holder.itemView.context)
+            .load(cafe.url)
+            .placeholder(R.drawable.default_image)
+            .error(R.drawable.default_image)
+            .into(holder.imgCafe)
+
+        holder.itemView.setOnClickListener { onItemClick(cafe) }
     }
 
     override fun getItemCount(): Int = cafes.size

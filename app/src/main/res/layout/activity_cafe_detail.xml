@@ -27,6 +27,22 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_back" />
 
+        <!-- 這是關鍵：用一個空的View撐開 ，才能一個在左一個在右-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+        <!-- 右上角的愛心收藏按鈕 -->
+        <ImageButton
+            android:id="@+id/btnLike"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="收藏"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_heart_outline" />
+
     </LinearLayout>
 
     <!-- Scrollable Content -->

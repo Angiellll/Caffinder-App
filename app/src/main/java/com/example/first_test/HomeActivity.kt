@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.google.gson.Gson
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -75,20 +77,20 @@ class HomeActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<Cafe>>, response: Response<List<Cafe>>) {
                 if (response.isSuccessful && response.body() != null) {
                     fullCafeList = response.body()!!
-                    adapter = CafeAdapter(fullCafeList.toMutableList()) { selectedCafe ->
+                    adapter = CafeAdapter(fullCafeList.toMutableList(), this@HomeActivity) { selectedCafe ->
                         val intent = Intent(this@HomeActivity, CafeDetailActivity::class.java)
                         intent.putExtra("cafe", selectedCafe)
                         startActivity(intent)
                     }
                     recyclerView.adapter = adapter
                 } else {
-                    Toast.makeText(this@HomeActivity, "載入失敗：${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@HomeActivity, "載入失敗", Toast.LENGTH_SHORT).show()
                 }
             }
 
+
             override fun onFailure(call: Call<List<Cafe>>, t: Throwable) {
-                Log.e("RetrofitError", "無法連線", t)
-                Toast.makeText(this@HomeActivity, "無法連線：${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@HomeActivity, "無法連線", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -97,12 +99,11 @@ class HomeActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString().trim()
                 val filteredList = fullCafeList.filter {
-                    (it.name?.contains(query, ignoreCase = true) == true) ||
-                            (it.address?.contains(query, ignoreCase = true) == true)
+                    it.name?.contains(query, ignoreCase = true) == true ||
+                            it.address?.contains(query, ignoreCase = true) == true
                 }
                 adapter.updateList(filteredList)
             }
-
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         })
@@ -143,8 +144,15 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, ScheduleActivity::class.java))
         }
         findViewById<ImageButton>(R.id.btnFavorite).setOnClickListener {
-            startActivity(Intent(this, FavoriteActivity::class.java))
+            if (fullCafeList.isEmpty()) {
+                Toast.makeText(this, "資料尚未載入完成", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val intent = Intent(this, FavoriteActivity::class.java)
+            intent.putParcelableArrayListExtra("all_cafes", ArrayList(fullCafeList)) // <- 這裡改成 Parcelable 傳遞
+            startActivity(intent)
         }
+
         findViewById<ImageButton>(R.id.btnNotification).setOnClickListener {
             startActivity(Intent(this, NotificationActivity::class.java))
         }

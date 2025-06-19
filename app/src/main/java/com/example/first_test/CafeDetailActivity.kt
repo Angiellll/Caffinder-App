@@ -3,6 +3,7 @@ package com.example.first_test
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -12,15 +13,41 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 
 class CafeDetailActivity : AppCompatActivity() {
+
+    private lateinit var btnLike: ImageButton
+    private var isFavorite = false
+    private val PREFS_NAME = "favorite_prefs"
+    private lateinit var cafeId: String  // 唯一ID用來記錄收藏狀態
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cafe_detail)
 
         val cafe = intent.getParcelableExtra<Cafe>("cafe")
         if (cafe == null) {
+            Toast.makeText(this, "沒有接收到咖啡廳資料！", Toast.LENGTH_LONG).show()
             finish() // 沒有資料就關掉頁面，避免出錯
             return
         }
+
+        // 假設Cafe有id欄位，作為收藏key
+        cafeId = cafe.id ?: "unknown_cafe_id"
+        Log.d("CafeDetailActivity", "Cafe id = $cafeId")
+
+        btnLike = findViewById(R.id.btnLike)
+
+        // 初始化收藏狀態
+        isFavorite = getFavoriteStatus(cafeId)
+        updateLikeButton()
+
+        btnLike.setOnClickListener {
+            isFavorite = !isFavorite
+            saveFavoriteStatus(cafeId, isFavorite)
+            updateLikeButton()
+            Toast.makeText(this, if (isFavorite) "已加入收藏" else "已取消收藏", Toast.LENGTH_SHORT)
+                .show()
+        }
+
 
         val imgCafe = findViewById<ImageView>(R.id.imgCafe)
         Glide.with(this)
@@ -28,6 +55,7 @@ class CafeDetailActivity : AppCompatActivity() {
             .placeholder(R.drawable.loading)
             .error(R.drawable.default_image)
             .into(imgCafe)
+
 
         val imgCafeUrl = findViewById<ImageView>(R.id.imgCafeUrl)
         if (cafe.url.isNullOrBlank()) {
@@ -38,6 +66,7 @@ class CafeDetailActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
 
         //店名
         findViewById<TextView>(R.id.tvCafeName).text = cafe.name ?: "名稱未知"
@@ -99,4 +128,28 @@ class CafeDetailActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
-}
+        // 讀取本地收藏狀態
+        private fun getFavoriteStatus(id: String): Boolean {
+            val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            val status = prefs.getBoolean(id, false)
+            Log.d("CafeDetailActivity", "getFavoriteStatus id=$id status=$status")
+            return status
+        }
+
+        // 儲存本地收藏狀態
+        private fun saveFavoriteStatus(id: String, status: Boolean) {
+            val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            prefs.edit().putBoolean(id, status).apply()
+            Log.d("CafeDetailActivity", "saveFavoriteStatus id=$id status=$status")
+        }
+
+
+    // 更新愛心按鈕圖示
+        private fun updateLikeButton() {
+            if (isFavorite) {
+                btnLike.setImageResource(R.drawable.ic_heart_filled)
+            } else {
+                btnLike.setImageResource(R.drawable.ic_heart_outline)
+            }
+        }
+    }
