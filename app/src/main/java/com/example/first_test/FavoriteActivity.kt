@@ -89,7 +89,6 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     // 取得傳進來的完整所有 Cafe 資料（安吉新增的）
-    // 取得傳進來的完整所有 Cafe 資料
     private fun getAllCafesFromIntent(): List<Cafe> {
         // 直接用 Parcelable 取回資料
         return intent.getParcelableArrayListExtra<Cafe>("all_cafes") ?: emptyList()
