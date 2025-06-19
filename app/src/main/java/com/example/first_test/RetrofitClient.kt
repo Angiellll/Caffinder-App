@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2/cafe_api/"
+    //private const val BASE_URL = "https://cafe-api-hgwp.onrender.com/get_cafes.php"
 
     val apiService: ApiService by lazy {
         Retrofit.Builder()
