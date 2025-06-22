@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.gson.Gson
 
 
@@ -39,6 +41,9 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var editTextSearch: EditText
 
     private var fullCafeList: List<Cafe> = emptyList()
+
+    // 篩選的元件
+    private lateinit var filterLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +113,32 @@ class HomeActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         })
 
+        // 篩選功能
+        val btnFilter = findViewById<ImageButton>(R.id.btnFilter)
+        btnFilter.setOnClickListener {
+            val intent = Intent(this, FilterDialog::class.java)
+            filterLauncher.launch(intent)
+        }
+        // 接收從 FilterActivity 回傳的資料
+        filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                if (data != null) {
+                    val city = data.getStringExtra("city") ?: ""
+                    val wifi = data.getFloatExtra("wifi", 0f)
+                    val seat = data.getFloatExtra("seat", 0f)
+                    val quiet = data.getFloatExtra("quiet", 0f)
+                    val food = data.getFloatExtra("food", 0f)
+                    val cheap = data.getFloatExtra("cheap", 0f)
+                    val music = data.getFloatExtra("music", 0f)
+                    val timeLimit = data.getStringExtra("timeLimit") ?: ""
+                    val socket = data.getStringExtra("socket") ?: ""
+                    val standing = data.getStringExtra("standing") ?: ""
+
+                    applyFilters(city, wifi, seat, quiet, food, cheap, music, timeLimit, socket, standing)
+                }
+            }
+        }
 
         // 地圖定位
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -178,4 +209,33 @@ class HomeActivity : AppCompatActivity() {
             locationManager.removeUpdates(locationListener)
         }
     }
+
+    //根據篩選條件過濾咖啡館列表
+    private fun applyFilters(
+        city: String,
+        wifi: Float,
+        seat: Float,
+        quiet: Float,
+        food: Float,
+        cheap: Float,
+        music: Float,
+        timeLimit: String,
+        socket: String,
+        standing: String
+    ) {
+        val filteredList = fullCafeList.filter { cafe ->
+            (city.isEmpty() || cafe.city?.contains(city, ignoreCase = true) == true) &&
+                    (wifi == 0f || (cafe.wifi ?: 0) >= wifi.toInt()) &&
+                    (seat == 0f || (cafe.seat ?: 0.0) >= seat.toDouble()) &&
+                    (quiet == 0f || (cafe.quiet ?: 0) >= quiet.toInt()) &&
+                    (food == 0f || (cafe.tasty ?: 0.0) >= food.toDouble()) &&
+                    (cheap == 0f || (cafe.cheap ?: 0.0) >= cheap.toDouble()) &&
+                    (music == 0f || (cafe.music ?: 0.0) >= music.toDouble()) &&
+                    (timeLimit == "未選擇" || cafe.limitedTime == timeLimit) &&
+                    (socket == "未選擇" || cafe.socket == socket) &&
+                    (standing == "未選擇" || cafe.standingDesk == standing)
+        }
+        adapter.updateList(filteredList)
+    }
+
 }

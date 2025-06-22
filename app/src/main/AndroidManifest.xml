@@ -18,6 +18,9 @@
         android:theme="@style/Theme.First_test"
         tools:targetApi="31">
         <activity
+            android:name=".FilterDialog"
+            android:exported="false" />
+        <activity
             android:name=".CafeDetailActivity"
             android:exported="false" />
         <activity

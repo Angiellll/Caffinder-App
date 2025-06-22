@@ -22,26 +22,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <EditText
-                android:id="@+id/editTextSearch"
+            <!-- 搜尋框 + 篩選 -->
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:hint="搜尋咖啡廳"
-                android:inputType="text" />
+                android:background="@drawable/search_background">
 
+                <EditText
+                    android:id="@+id/editTextSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="搜尋咖啡廳"
+                    android:background="@android:color/transparent"
+                    android:paddingStart="60dp"
+                    android:paddingEnd="60dp"
+                    android:inputType="text" />
+
+                <!-- 離右邊邊框距離：android:layout_marginEnd="15dp" -->
+                <ImageButton
+                    android:id="@+id/btnFilter"
+                    android:layout_width="50dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_filter"
+                    android:contentDescription="篩選"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true" />
+            </FrameLayout>
+
+            <!-- 定位按鈕 -->
             <ImageButton
                 android:id="@+id/btnLocation"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:src="@drawable/location"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
-                android:contentDescription="定位"
-                android:src="@drawable/location" />
+                android:contentDescription="定位" />
         </LinearLayout>
+
 
         <!-- 店家列表 RecyclerView -->
         <!-- 在 activity_home.xml 中加入 RecyclerView -->
