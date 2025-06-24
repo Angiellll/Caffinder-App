@@ -31,14 +31,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
-        languageVersion = "1.9"
-        apiVersion = "1.9"
+        jvmTarget = "17"
+        languageVersion = "2.0"
+        apiVersion = "2.0"
     }
+}
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -46,7 +49,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    implementation("com.google.firebase:firebase-firestore")
+    // implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     kapt ("com.github.bumptech.glide:compiler:4.16.0")
 
