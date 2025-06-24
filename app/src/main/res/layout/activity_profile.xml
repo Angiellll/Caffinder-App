@@ -64,9 +64,13 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_marginBottom="24dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="個人頭像"
+                android:clickable="true"
+                android:focusable="true"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView

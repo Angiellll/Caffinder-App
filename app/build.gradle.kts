@@ -50,7 +50,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-    // implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    implementation("com.google.firebase:firebase-storage-ktx")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     kapt ("com.github.bumptech.glide:compiler:4.16.0")
 
@@ -70,5 +70,6 @@ dependencies {
     //api
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
 
 }

@@ -14,11 +14,33 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
+import android.app.AlertDialog
+import android.widget.GridLayout
+import android.widget.HorizontalScrollView
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ScrollView
+
+// 全域變數
+private var selectedImageResId: Int = R.drawable.ic_avatar_1
 
 class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+
+        val imageView = findViewById<ImageView>(R.id.imageView)
+        val btnSelectImage = findViewById<Button>(R.id.btnSelectImage)
+        val imageOptions = arrayOf(
+            R.drawable.ic_avatar_1,
+            R.drawable.ic_avatar_2,
+            R.drawable.ic_avatar_3,
+            R.drawable.ic_avatar_4,
+            R.drawable.ic_avatar_5,
+            R.drawable.ic_avatar_6,
+            R.drawable.ic_avatar_7,
+            R.drawable.ic_avatar_8
+        )
 
         val etName = findViewById<EditText>(R.id.etName)
         val etBirthday = findViewById<EditText>(R.id.etBirthday)
@@ -58,6 +80,40 @@ class EditProfileActivity : AppCompatActivity() {
                 etBirthday.setText(String.format("%04d-%02d-%02d", y, m + 1, d))
             }, year, month, day).show()
         }
+        btnSelectImage.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("選擇頭貼")
+
+            val scrollView = ScrollView(this)
+            val gridLayout = GridLayout(this).apply {
+                rowCount = 2
+                columnCount = 4
+                setPadding(20, 20, 20, 20)
+            }
+
+            scrollView.addView(gridLayout)
+
+            // ⚠️ 先宣告 alertDialog，讓裡面的 setOnClickListener 能存取它
+            val alertDialog = builder.setView(scrollView).create()
+
+            imageOptions.forEach { resId ->
+                val image = ImageView(this).apply {
+                    setImageResource(resId)
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        width = 200
+                        height = 200
+                        setMargins(16, 16, 16, 16)
+                    }
+                    setOnClickListener {
+                        selectedImageResId = resId
+                        imageView.setImageResource(resId)
+                        alertDialog.dismiss()
+                    }
+                }
+                gridLayout.addView(image)
+            }
+            alertDialog.show()
+        }
 
         btnSave.setOnClickListener {
             Toast.makeText(this, "按鈕按下了", Toast.LENGTH_SHORT).show()
@@ -83,7 +139,8 @@ class EditProfileActivity : AppCompatActivity() {
                     "birthday" to birthday,
                     "phone" to phone,
                     "gender" to gender,
-                    "email" to user.email
+                    "email" to user.email,
+                    "avatarResId" to selectedImageResId  // ← 這裡改掉！
                 )
                 Log.d("EditProfile", "開始寫入 Firestore")  // 2. 開始寫入雲端
 

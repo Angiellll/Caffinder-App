@@ -1,5 +1,6 @@
 package com.example.first_test
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,24 +9,32 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.first_test.EditProfileActivity
 import com.example.first_test.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
+import com.google.firebase.firestore.SetOptions
 
 class ProfileActivity : AppCompatActivity() {
+
     // 定義新的 launcher（用來接收 EditProfile 回傳的資料）
     private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
-
+    // ✅ 新增，放這裡
+    private lateinit var imageView: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+        // ✅ 新增圖片選取功能初始化
+        imageView = findViewById(R.id.imageView)
+        imageView.setOnClickListener {
+            showAvatarSelectionDialog()
+        }
 
         window.statusBarColor = Color.parseColor("#4c2812")
         window.navigationBarColor = Color.parseColor("#4c2812")
@@ -43,6 +52,13 @@ class ProfileActivity : AppCompatActivity() {
                         val phone = document.getString("phone") ?: ""
                         val gender = document.getString("gender") ?: ""
                         val email = document.getString("email") ?: ""
+                        val avatarResId = document.getLong("avatarResId")?.toInt()
+                        if (avatarResId != null) {
+                            imageView.setImageResource(avatarResId)
+                        } else {
+                            // 不設定任何圖片，或是清空圖片
+                            imageView.setImageDrawable(null)
+                        }
 
                         // ✅ 顯示在畫面上
                         findViewById<TextView>(R.id.txtName).text = "姓名：$name"
@@ -64,10 +80,6 @@ class ProfileActivity : AppCompatActivity() {
 
         val btnEditProfile = findViewById<Button>(R.id.btnEditProfile)
 
-        // 🔹 顯示 Firebase 登入使用者的 email
-        //val currentUser = FirebaseAuth.getInstance().currentUser
-        //val emailFromFirebase = currentUser?.email
-       // findViewById<TextView>(R.id.txtEmail).text = "電子郵件：${emailFromFirebase ?: "尚未登入"}"
 
         // 🔹 註冊 Activity Result 處理函式
         editProfileLauncher = registerForActivityResult(
@@ -158,4 +170,45 @@ class ProfileActivity : AppCompatActivity() {
         }
 
     }
+    private fun showAvatarSelectionDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("選擇頭貼")
+
+        val avatarNames = arrayOf("頭貼1", "頭貼2", "頭貼3", "頭貼4", "頭貼5", "頭貼6", "頭貼7", "頭貼8")
+
+        builder.setItems(avatarNames) { _, which ->
+            val selectedResId = avatarResIds[which]
+            imageView.setImageResource(selectedResId)
+
+            // 儲存到 Firestore
+            saveAvatarResIdToFirestore(selectedResId)
+            Toast.makeText(this, "已更新頭貼", Toast.LENGTH_SHORT).show()
+        }
+        builder.show()
+    }
+    private val avatarResIds = arrayOf(
+        R.drawable.ic_avatar_1,
+        R.drawable.ic_avatar_2,
+        R.drawable.ic_avatar_3,
+        R.drawable.ic_avatar_4,
+        R.drawable.ic_avatar_5,
+        R.drawable.ic_avatar_6,
+        R.drawable.ic_avatar_7,
+        R.drawable.ic_avatar_8
+    )
+    private fun saveAvatarResIdToFirestore(resId: Int) {
+        val user = FirebaseAuth.getInstance().currentUser ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        val data = mapOf("avatarResId" to resId)
+        db.collection("users").document(user.uid)
+            .set(data, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("ProfileActivity", "頭貼已更新至 Firestore")
+            }
+            .addOnFailureListener {
+                Log.e("ProfileActivity", "Firestore 更新失敗", it)
+            }
+    }
+
 }
