@@ -69,6 +69,22 @@ class EditProfileActivity : AppCompatActivity() {
         etEmail.setText(currentUser?.email ?: "無法取得")
         etEmail.isEnabled = false
 
+        // 🔰 載入上次儲存的頭貼 avatarResId（無預設圖）
+        val db = FirebaseFirestore.getInstance()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+        if (uid != null) {
+            db.collection("users").document(uid).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val avatarResId = document.getLong("avatarResId")?.toInt()
+                        if (avatarResId != null) {
+                            selectedImageResId = avatarResId
+                            imageView.setImageResource(avatarResId)
+                        }
+                    }
+                }
+        }
         // 日期選擇器
         etBirthday.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -80,6 +96,7 @@ class EditProfileActivity : AppCompatActivity() {
                 etBirthday.setText(String.format("%04d-%02d-%02d", y, m + 1, d))
             }, year, month, day).show()
         }
+
         btnSelectImage.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("選擇頭貼")
@@ -156,6 +173,7 @@ class EditProfileActivity : AppCompatActivity() {
                             putExtra("birthday", birthday)
                             putExtra("phone", phone)
                             putExtra("gender", gender)
+                            putExtra("avatarResId", selectedImageResId)  // ✅ 新增這行
                         }
                         Log.d("EditProfile", "已設定 result OK")  // 4. 已設定結果
                         setResult(Activity.RESULT_OK, resultIntent)
