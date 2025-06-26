@@ -39,7 +39,12 @@ class FavoriteAdapter(
                 // 取消收藏
                 prefs.edit().remove(cafe.id).apply()
                 Toast.makeText(holder.itemView.context, "已取消收藏", Toast.LENGTH_SHORT).show()
-                holder.btnLike.setImageResource(R.drawable.ic_heart_outline)
+                //holder.btnLike.setImageResource(R.drawable.ic_heart_outline)
+                val positionToRemove = holder.adapterPosition
+                if (positionToRemove != RecyclerView.NO_POSITION) {
+                    cafeList.removeAt(positionToRemove)
+                    notifyItemRemoved(positionToRemove)
+                }
             }
         }
     }
@@ -67,6 +72,12 @@ class FavoriteAdapter(
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.default_image)
                 .into(imgCafe)
+            // ✅ 顯示愛心狀態（避免畫面重複使用時錯亂）
+            val prefs = itemView.context.getSharedPreferences("favorite_prefs", Context.MODE_PRIVATE)
+            val isFavorite = prefs.getBoolean(cafe.id, false)
+            btnLike.setImageResource(
+                if (isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline
+            )
         }
     }
 }

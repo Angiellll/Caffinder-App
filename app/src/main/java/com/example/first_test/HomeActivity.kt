@@ -83,11 +83,6 @@ class HomeActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     fullCafeList = response.body()!!
 
-                    // 🔍 加上這段
-                   // for (cafe in fullCafeList) {
-                     //   Log.d("CafeDebug", "Cafe: ${cafe.name}, id: ${cafe.id}")
-                    //
-                    //}
                     // 存入 CafeDataStore
                     CafeDataStore.setCafes(fullCafeList)
 
