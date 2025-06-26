@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -61,37 +62,51 @@ class FavoriteActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewFavorite)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 🟢 取得從 HomeActivity 傳過來的所有咖啡廳資料（安吉新增的）
-        allCafes = getAllCafesFromIntent()
+        allCafes = CafeDataStore.getAllCafes()  // <--
+
+        // 加入這段除錯，印出每筆咖啡廳id跟名字
+        allCafes.forEach { cafe ->
+            Log.d("FavoriteActivity", "onCreate allCafes id=${cafe.id} name=${cafe.name}")
+        }
 
         // 取得已收藏的 ID 清單（安吉新增的）
         val favoriteIds = getFavoriteIds()
-
+        Log.d("FavoriteActivity", "收藏IDs: $favoriteIds")
         // 過濾出已收藏的咖啡廳資料（安吉新增的）
         val favoriteCafes = allCafes.filter { cafe -> favoriteIds.contains(cafe.id) }.toMutableList()
+        Log.d("FavoriteActivity", "收藏咖啡廳數量: ${favoriteCafes.size}")
 
-
-        favoriteAdapter = FavoriteAdapter(favoriteCafes) { selectedCafe ->
+        // 🔄 修改：只傳入點擊事件給 FavoriteAdapter（列表用 updateList 之後再設）
+        favoriteAdapter = FavoriteAdapter { selectedCafe ->
             val intent = Intent(this, CafeDetailActivity::class.java)
             intent.putExtra("cafe", selectedCafe)
             startActivity(intent)
         }
         recyclerView.adapter = favoriteAdapter
+        // 🟢 新增：將資料列表更新給 Adapter
+        favoriteAdapter.updateList(favoriteCafes)
 
         // 設定底部按鈕
         setupBottomNav()
+    }
+
+    // 🔼 新增：每次回到畫面都更新收藏列表
+    override fun onResume() {
+        super.onResume()
+        val updatedFavoriteIds = getFavoriteIds()
+        Log.d("FavoriteActivity", "onResume 讀到的收藏IDs = $updatedFavoriteIds")
+
+        //val updatedFavoriteCafes = allCafes.filter { updatedFavoriteIds.contains(it.id) }.toMutableList()
+        val updatedFavoriteCafes = CafeDataStore.getAllCafes().filter { updatedFavoriteIds.contains(it.id) }.toMutableList()
+        Log.d("FavoriteActivity", "篩選出來的咖啡廳數量 = ${updatedFavoriteCafes.size}")
+
+        favoriteAdapter.updateList(updatedFavoriteCafes)
     }
 
     // 取得所有收藏的ID（安吉新增的）
     private fun getFavoriteIds(): Set<String> {
         val prefs = getSharedPreferences("favorite_prefs", Context.MODE_PRIVATE)
         return prefs.all.mapNotNull { if (it.value == true) it.key else null }.toSet()
-    }
-
-    // 取得傳進來的完整所有 Cafe 資料（安吉新增的）
-    private fun getAllCafesFromIntent(): List<Cafe> {
-        // 直接用 Parcelable 取回資料
-        return intent.getParcelableArrayListExtra<Cafe>("all_cafes") ?: emptyList()
     }
 
     // 新增 setupBottomNav() 函式，把底部導航收好（安吉新增的）

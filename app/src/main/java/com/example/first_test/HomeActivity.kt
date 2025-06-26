@@ -82,6 +82,15 @@ class HomeActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<Cafe>>, response: Response<List<Cafe>>) {
                 if (response.isSuccessful && response.body() != null) {
                     fullCafeList = response.body()!!
+
+                    // 🔍 加上這段
+                   // for (cafe in fullCafeList) {
+                     //   Log.d("CafeDebug", "Cafe: ${cafe.name}, id: ${cafe.id}")
+                    //
+                    //}
+                    // 存入 CafeDataStore
+                    CafeDataStore.setCafes(fullCafeList)
+
                     adapter = CafeAdapter(fullCafeList.toMutableList(), this@HomeActivity) { selectedCafe ->
                         val intent = Intent(this@HomeActivity, CafeDetailActivity::class.java)
                         intent.putExtra("cafe", selectedCafe)
@@ -180,7 +189,7 @@ class HomeActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val intent = Intent(this, FavoriteActivity::class.java)
-            intent.putParcelableArrayListExtra("all_cafes", ArrayList(fullCafeList)) // <- 這裡改成 Parcelable 傳遞
+           // intent.putParcelableArrayListExtra("all_cafes", ArrayList(fullCafeList)) // <- 這裡改成 Parcelable 傳遞
             startActivity(intent)
         }
 

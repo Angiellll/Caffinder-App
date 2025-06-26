@@ -44,6 +44,7 @@ class CafeDetailActivity : AppCompatActivity() {
             isFavorite = !isFavorite
             saveFavoriteStatus(cafeId, isFavorite)
             updateLikeButton()
+            Log.d("CafeDetailActivity", "saveFavoriteStatus id=$cafeId status=$isFavorite")
             Toast.makeText(this, if (isFavorite) "已加入收藏" else "已取消收藏", Toast.LENGTH_SHORT)
                 .show()
         }
